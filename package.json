@@ -4,6 +4,7 @@
   "description": "Official DataRes Discord bot",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -13,6 +14,7 @@
     "discord.js": "^14.5.0",
     "dotenv": "^16.0.3",
     "google-spreadsheet": "^3.3.0",
+    "mongodb": "^4.13.0",
     "nedb": "^1.8.0"
   },
   "devDependencies": {

@@ -1,11 +1,11 @@
-const Datastore = require('nedb');
+const { MongoClient } = require("mongodb");
 
-// const db = {};
+const connectionString = `mongodb+srv://admin:${process.env.MONGO_PASSWORD}@cluster0.7tfqkhl.mongodb.net/?retryWrites=true&w=majority`
+const client = new MongoClient(connectionString);
 
-const getDb = () => {
-	const db = new Datastore({ filename: 'db/verification.db', autoload: true });
-	db.loadDatabase();
-	return db;
+const getDb = (collection) => {	
+	const db = client.db('datares-discord-bot');
+	return db.collection(collection);;
 }
 
 module.exports = { getDb };

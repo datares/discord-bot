@@ -9,19 +9,16 @@ const readSheet = async () => {
 	doc.useApiKey(API_KEY);
 	// https://theoephraim.github.io/node-google-spreadsheet/#/classes/google-spreadsheet-worksheet
 	await doc.loadInfo();
-	// console.log('>>', doc.title)
 	// https://theoephraim.github.io/node-google-spreadsheet/#/classes/google-spreadsheet-worksheet?id=basic-sheet-properties
 	const sheet = doc.sheetsByIndex[0];
 	const rows = await sheet.getRows({ offset:0 });
 	const data = [];
-	// console.log('# ' + rows[0]._sheet.headerValues.join(','));
 	for (const row of rows) {
 		data.push({ name: row.Name, email: row.Email, status: row.Status });
 	}
-	// console.log(data);
 	return data;
 };
 
 
-module.exports = { readSheet };
+module.exports = readSheet;
 
