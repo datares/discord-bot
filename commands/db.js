@@ -8,4 +8,7 @@ const getDb = (collection) => {
 	return db.collection(collection);;
 }
 
-module.exports = { getDb };
+verification = getDb('verification');
+users = getDb('users');
+
+module.exports = { getDb, verification, users };

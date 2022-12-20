@@ -69,7 +69,11 @@ client.on('interactionCreate', async interaction => {
 	}
 	else if (commandName === 'iam') {
 		const email = args.get('email').value;
-		await iam(email, user_id);
+		const res = await iam(email, user_id);
+		if (res === 'invalid email') {
+			await interaction.reply('The email address you entered is not valid.  Please try again');
+			return;
+		}
 		await interaction.reply('Please check your email address for an authorization code');
 	}
 	else if (commandName === 'verify') {
