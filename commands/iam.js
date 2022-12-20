@@ -1,5 +1,5 @@
-const { sendEmail } = require('./send_email');
 const { getDb } = require('./db')
+const sendEmail = require('./send_email');
 
 const makeVerificationCode = () => {
     return Math.floor(Math.random() * 1000000);
@@ -7,7 +7,8 @@ const makeVerificationCode = () => {
 
 const iam = async (email, user_id) => {
     const verification_code = makeVerificationCode();
-    // const res = await sendEmail(email, verification_code);
+    const res = await sendEmail(email, verification_code);
+    console.log(res)
 
     const doc = {
         verification_code: verification_code,

@@ -21,7 +21,7 @@ const sendEmail = (recipientEmail, verificationCode) => {
 			Body: {
 				Html: {
 					Charset: 'UTF-8',
-					Data: `Your verification code is ${verificationCode}`,
+					Data: `Howdy!\nYour Discord verification code is ${verificationCode}.`,
 				},
 			},
 			Subject: {
@@ -33,7 +33,4 @@ const sendEmail = (recipientEmail, verificationCode) => {
 	return AWS_SES.sendEmail(params).promise();
 };
 
-module.exports = {
-	sendEmail,
-};
-
+module.exports = sendEmail;

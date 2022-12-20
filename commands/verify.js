@@ -1,5 +1,5 @@
 const { getDb } = require('./db')
-const {updateUserRoles} = require('./helpers')
+const { updateUserRoles } = require('./helpers')
 
 const addVerifiedUser = async (user_id, email, team) => {
     const db = getDb('users');
