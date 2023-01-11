@@ -4,7 +4,7 @@ Simple discord bot to verify member emails and apply roles according to our dire
 
 Emails are sent using AWS Simple Email Service and data is stored in MongoDB
 
-# Setup
+# Development
 
 - Put following secrets in the `.env` file
 `
@@ -20,6 +20,19 @@ SERVER_ID,
 MONGO_PASSWORD,
 `
 
-# Running
+Run `npm run dev` to start the discord bot.
+ 
 
-Run `npm run dev`
+# Deploying
+
+This is hosted on an AWS Free Tier EC2 Instance.  To deploy the server, first launch the instance and install nodejs and nvm using [this guide](https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-20-04).
+
+Then, clone this repository, and run `npn i` to install the packages, and run `nvm use` to install the correct version of nodejs.
+
+Next, run `npm i -g forever`, which is a package that allows us to run our server as a daemon so we don't have to worry about restarting the server if it breaks.  Also, populate `.env` with the secrets from development.
+
+To start the server, run `forever start -c 'node index.js' ./`, and you can verify that it started by running `forever list`, which should the uptime and logs.
+
+To redeploy, pull changes from git and run `forever restartall`.
+
+Logs are published to Cloudwatch.

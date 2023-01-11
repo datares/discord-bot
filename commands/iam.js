@@ -19,8 +19,8 @@ const iam = async (email, user_id) => {
     }
 
     const verification_code = makeVerificationCode();
-    await sendEmail(email, verification_code);
-    // console.log(res)
+    const res = await sendEmail(email, verification_code);
+    console.log('Sent email', res)
 
     const doc = {
         verification_code: verification_code,

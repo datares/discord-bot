@@ -63,6 +63,7 @@ client.on('interactionCreate', async interaction => {
 
 	if (commandName === 'ping') {
 		await interaction.reply('Pong!');
+		console.log('Ran command ping');
 	}
 	else if (commandName === 'server') {
 		await interaction.reply(`Server name: ${interaction.guild.name}\nTotal members: ${interaction.guild.memberCount}`);
@@ -95,6 +96,10 @@ client.on('interactionCreate', async interaction => {
 	}
 	else if (commandName === 'whoami') {
 		const res = await whoami(user_id);
+		if (!res) {
+			await interaction.reply('Your account is not verified, please verify your account using /iam and /verify first');
+			return;
+		}
 		await interaction.reply(`Email: ${res.email}\nTeam: ${res.team}`);
 	}
 });
