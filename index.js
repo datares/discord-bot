@@ -85,7 +85,7 @@ client.on('interactionCreate', async interaction => {
 			return;
 		}
 		else if (res === 'not-a-member') {
-			await interaction.reply('You are not in the DataRes directory.  If this is a mistake, please contact Colin Curtis');
+			await interaction.reply('You are not in the DataRes directory.  If this is a mistake, please contact leadership');
 			return;
 		}
 		await interaction.reply('Successfully verified your account');
