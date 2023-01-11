@@ -62,45 +62,45 @@ client.on('interactionCreate', async interaction => {
 	const args = interaction.options;
 
 	if (commandName === 'ping') {
-		await interaction.reply('Pong!');
+		await interaction.reply({ content: 'Pong!', ephemeral: true });
 		console.log('Ran command ping');
 	}
 	else if (commandName === 'server') {
-		await interaction.reply(`Server name: ${interaction.guild.name}\nTotal members: ${interaction.guild.memberCount}`);
+		await interaction.reply({ content: `Server name: ${interaction.guild.name}\nTotal members: ${interaction.guild.memberCount}`, ephemeral: true });
 	}
 	else if (commandName === 'iam') {
 		const email = args.get('email').value;
 		const res = await iam(email, user_id);
 		if (res === 'invalid email') {
-			await interaction.reply('The email address you entered is not valid.  Please try again');
+			await interaction.reply({ content: 'The email address you entered is not valid.  Please try again', ephemeral: true });
 			return;
 		}
-		await interaction.reply('Please check your email address for an authorization code');
+		await interaction.reply({ content: 'Please check your email address for an authorization code', ephemeral: true });
 	}
 	else if (commandName === 'verify') {
 		const code = args.get('code').value;
 		const res = await verify(code, user_id, client);
 		if (res === 'incorrect code') {
-			await interaction.reply('Entered incorrect verification code, please try again');
+			await interaction.reply({ content: 'Entered incorrect verification code, please try again', ephemeral: true });
 			return;
 		}
-		await interaction.reply('Successfully verified your account');
+		await interaction.reply({ content: 'Successfully verified your account', ephemeral: true });
 	}
 	else if (commandName === 'update-roles') {
 		const res = await updateRoles(user_id, client);
 		if (res === 'not verified') {
-			await interaction.reply('Your account is not verified, please verify your account using /iam and /verify first');
+			await interaction.reply({ content: 'Your account is not verified, please verify your account using /iam and /verify first', ephemeral: true });
 			return;
 		}
-		await interaction.reply('User roles have been updated according to our directory');
+		await interaction.reply({ content: 'User roles have been updated according to our directory', ephemeral: true });
 	}
 	else if (commandName === 'whoami') {
 		const res = await whoami(user_id);
 		if (!res) {
-			await interaction.reply('Your account is not verified, please verify your account using /iam and /verify first');
+			await interaction.reply({ content: 'Your account is not verified, please verify your account using /iam and /verify first', ephemeral: true });
 			return;
 		}
-		await interaction.reply(`Email: ${res.email}\nTeam: ${res.team}`);
+		await interaction.reply({ content: `Email: ${res.email}\nTeam: ${res.team}`, ephemeral: true });
 	}
 });
 
