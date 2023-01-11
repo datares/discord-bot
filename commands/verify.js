@@ -14,6 +14,9 @@ const verify = async (code, user_id, client) => {
     }
     const email = userVerification.email;
     const role = await updateUserRoles(email, user_id, client);
+    if (!role) {
+        return 'not-a-member';
+    }
     addVerifiedUser(user_id, email, role);
     await verification.deleteOne(doc);
     return 'success';

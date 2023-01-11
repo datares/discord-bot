@@ -5,6 +5,9 @@ const getRoles = async (email) => {
     const user = members.find((value) => {
         return value.email == email
     });
+    if (!user) {
+        return null;
+    }
     return user.status
 }
 
@@ -16,8 +19,8 @@ const getMember = (client, userId) => {
 
 const updateUserRoles = async (email, user_id, client) => {
     const role_to_assign = await getRoles(email);
-    if (role_to_assign === '') {
-        return role_to_assign;
+    if (!role) {
+        return null;
     }
     const member = getMember(client, user_id);
     const role = member.guild.roles.cache.find(role => role.name === role_to_assign);

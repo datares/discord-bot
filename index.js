@@ -84,6 +84,10 @@ client.on('interactionCreate', async interaction => {
 			await interaction.reply('Entered incorrect verification code, please try again');
 			return;
 		}
+		else if (res === 'not-a-member') {
+			await interaction.reply('You are not in the DataRes directory.  If this is a mistake, please contact Colin Curtis');
+			return;
+		}
 		await interaction.reply('Successfully verified your account');
 	}
 	else if (commandName === 'update-roles') {
