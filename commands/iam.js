@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { ERROR_MESSAGE } = require('./constants');
-const { verification } = require('./db')
+const db = require('../db')
 const sendEmail = require('./send_email');
 
 const makeVerificationCode = () => {
@@ -47,7 +47,7 @@ async function execute(interaction) {
     };
 
     try {
-        await verification.insertOne(doc); // TODO: replace existing doc
+        await db.collection("verification").insertOne(doc); // TODO: replace existing doc
     }
     catch (err) {
         console.error('Caught exception in inserting document', err);
