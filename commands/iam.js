@@ -15,12 +15,17 @@ const validateEmail = (email) => {
 
 const iam = async (email, user_id) => {
     if (!validateEmail(email)) {
-        return 'invalid email';
+        return [null, 'Your email doesn\'t appear to be a valid email. Please try again'];
     }
 
     const verification_code = makeVerificationCode();
-    const res = await sendEmail(email, verification_code);
-    console.log('Sent email', res)
+    try {
+        await sendEmail(email, verification_code);
+    }
+    catch (err) {
+        console.log('Caught exception in sending email.', err);
+        return ['Error sending email', null];
+    }
 
     const doc = {
         verification_code: verification_code,
@@ -28,8 +33,14 @@ const iam = async (email, user_id) => {
         user_id: user_id,
     }
 
-    await verification.insertOne(doc);
-    return 'success';
+    try {
+        await verification.insertOne(doc); // TODO: replace existing doc
+    }
+    catch (err) {
+        return ['Error calling database', null];
+    }
+
+    return [null, 'Please check your email address for an authorization code'];
 };
 
 module.exports = iam;

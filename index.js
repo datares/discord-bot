@@ -1,5 +1,5 @@
 const { REST, Client, GatewayIntentBits, SlashCommandBuilder, Routes } = require('discord.js');
-require('dotenv').config();
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` });
 
 const {iam, verify, updateRoles, whoami} = require('./commands');
 
@@ -61,6 +61,8 @@ client.on('interactionCreate', async interaction => {
 	const user_id = interaction.member.user.id;
 	const args = interaction.options;
 
+	let err, message = null;
+
 	if (commandName === 'ping') {
 		await interaction.reply({ content: 'Pong!', ephemeral: true });
 		console.log('Ran command ping');
@@ -70,37 +72,25 @@ client.on('interactionCreate', async interaction => {
 	}
 	else if (commandName === 'iam') {
 		const email = args.get('email').value;
-		const res = await iam(email, user_id);
-		if (res === 'invalid email') {
-			await interaction.reply({ content: 'The email address you entered is not valid.  Please try again', ephemeral: true });
-			return;
-		}
-		await interaction.reply({ content: 'Please check your email address for an authorization code', ephemeral: true });
+		[err, message] = await iam(email, user_id);
 	}
 	else if (commandName === 'verify') {
 		const code = args.get('code').value;
-		const res = await verify(code, user_id, client);
-		if (res === 'incorrect code') {
-			await interaction.reply({ content: 'Entered incorrect verification code, please try again', ephemeral: true });
-			return;
-		}
-		await interaction.reply({ content: 'Successfully verified your account', ephemeral: true });
+		[err, message] = await verify(code, user_id, client);
 	}
 	else if (commandName === 'update-roles') {
-		const res = await updateRoles(user_id, client);
-		if (res === 'not verified') {
-			await interaction.reply({ content: 'Your account is not verified, please verify your account using /iam and /verify first', ephemeral: true });
-			return;
-		}
-		await interaction.reply({ content: 'User roles have been updated according to our directory', ephemeral: true });
+		[err, message] = await updateRoles(user_id, client);
 	}
 	else if (commandName === 'whoami') {
-		const res = await whoami(user_id);
-		if (!res) {
-			await interaction.reply({ content: 'Your account is not verified, please verify your account using /iam and /verify first', ephemeral: true });
-			return;
-		}
-		await interaction.reply({ content: `Email: ${res.email}\nTeam: ${res.team}`, ephemeral: true });
+		[err, message] = await whoami(user_id);
+	}
+
+	if (message) {
+		interaction.reply({ content: message, ephemeral: true });
+	}
+	else if (err) {
+		interaction.reply({ content: 'Oopsie! Something went wrong on our end.  If this persists, contact leadership', ephemeral: true });
+		console.log(`Command ${commandName} failed`, err)
 	}
 });
 
