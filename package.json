@@ -4,7 +4,8 @@
   "description": "Official DataRes Discord bot",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
+    "start": "NODE_ENV=development nodemon index.js",
+    "start-prod": "NODE_ENV=production node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
