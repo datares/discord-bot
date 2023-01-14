@@ -1,5 +1,6 @@
 const { ERROR_MESSAGE } = require('./constants');
 const { getDb } = require('./db')
+const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()

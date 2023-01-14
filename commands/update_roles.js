@@ -1,6 +1,7 @@
 const { ERROR_MESSAGE } = require('./constants');
 const { users } = require('./db')
 const {updateUserRoles} = require('./helpers');
+const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()

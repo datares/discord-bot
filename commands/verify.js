@@ -1,6 +1,7 @@
 const { ERROR_MESSAGE } = require('./constants');
 const { verification, users } = require('./db')
 const { updateUserRoles } = require('./helpers')
+const { SlashCommandBuilder } = require('discord.js');
 
 const addVerifiedUser = async (user_id, email, team) => {
     const doc = { user_id, email, team };
