@@ -31,8 +31,13 @@ Then, clone this repository, and run `npn i` to install the packages, and run `n
 
 Next, run `npm i -g forever`, which is a package that allows us to run our server as a daemon so we don't have to worry about restarting the server if it breaks.  Also, populate `.env` with the secrets from development.
 
-To start the server, run `forever start -c 'node index.js' ./`, and you can verify that it started by running `forever list`, which should the uptime and logs.
+To start the server, run `forever start -c 'node index.js' ./`, and you can verify that it started by running `forever list`, which should show the uptime and log file path.
 
 To redeploy, pull changes from git and run `forever restartall`.
 
-Logs are published to Cloudwatch.
+If the log file for forever changes as denoted by `forever list`, then you will have to update the AWS Cloudwatch config file, which is stored in `/opt/aws/amazon-cloudwatch-agent/bin/config.json`.  In that case, edit `log_file_path` to point to the new log file.  Finally, run
+
+```bash
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/bin/config.json -s
+```
+to restart the Cloudwatch agent.
