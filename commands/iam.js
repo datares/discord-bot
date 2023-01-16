@@ -1,3 +1,5 @@
+const { SlashCommandBuilder } = require('discord.js');
+const { ERROR_MESSAGE } = require('./constants');
 const { verification } = require('./db')
 const sendEmail = require('./send_email');
 
@@ -13,9 +15,16 @@ const validateEmail = (email) => {
       );
 };
 
-const iam = async (email, user_id) => {
+async function execute(interaction) {
+    const email = interaction.options.get('email').value;
+    const user_id = interaction.member.user.id;
+    
     if (!validateEmail(email)) {
-        return [null, 'Your email doesn\'t appear to be a valid email. Please try again'];
+        interaction.reply({
+            content: 'Your email doesn\'t appear to be a valid email. Please try again',
+            ephemeral: true,
+        });
+        return;
     }
 
     const verification_code = makeVerificationCode();
@@ -23,24 +32,47 @@ const iam = async (email, user_id) => {
         await sendEmail(email, verification_code);
     }
     catch (err) {
-        console.log('Caught exception in sending email.', err);
-        return ['Error sending email', null];
+        console.error('Caught exception in sending email.', err);
+        interaction.reply({
+            content: ERROR_MESSAGE,
+            ephemeral: true
+        });
+        return;
     }
 
     const doc = {
         verification_code: verification_code,
         email: email,
         user_id: user_id,
-    }
+    };
 
     try {
         await verification.insertOne(doc); // TODO: replace existing doc
     }
     catch (err) {
-        return ['Error calling database', null];
+        console.error('Caught exception in inserting document', err);
+        interaction.reply({
+            content: ERROR_MESSAGE,
+            ephemeral: true
+        });
+        return;
     }
 
-    return [null, 'Please check your email address for an authorization code'];
-};
+    interaction.reply({
+        content: 'Please check your email address for an authorization code',
+        ephemeral: true
+    });
+}
 
-module.exports = iam;
+module.exports = {
+    data: new SlashCommandBuilder()
+        .setName('iam')
+		.setDescription('Set your email address with the server')
+		.addStringOption((option) =>
+			option
+				.setName('email')
+				.setDescription('Your UCLA email address (or whatever email you think we have in our directory)')
+				.setRequired(true),
+		),
+    execute
+};

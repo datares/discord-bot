@@ -1,18 +1,31 @@
+const { ERROR_MESSAGE } = require('./constants');
 const { users } = require('./db')
 const {updateUserRoles} = require('./helpers');
+const { SlashCommandBuilder } = require('discord.js');
 
-const updateRoles = async (user_id, client) => {
+async function execute(interaction) {
+    const user_id = interaction.member.user.id;
+    const client = interaction.client;
+
     let data = null;
     try {
         data = await users.findOne({user_id});
     }
     catch (err) {
-        console.log('Caught exception in /update-roles', err);
-        return ['Error finding user in database.', null];
+        console.error('Caught exception in /update-roles', err);
+        interaction.reply({
+            content: ERROR_MESSAGE,
+            ephemeral: true
+        });
+        return;
     }
 
     if (!data) {
-        return ['User is not verified.  Please verify your account using /iam and /verify first', null];
+        interaction.reply({
+            content: 'User is not verified.  Please verify your account using /iam and /verify first',
+            ephemeral: true
+        });
+        return;
     }
 
     try {
@@ -21,13 +34,24 @@ const updateRoles = async (user_id, client) => {
             team: new_role
         }})
     }
-
     catch (err) {
-        console.log('Caught exception in /update-roles', err);
-        return ['Error updating role in database.', null];
+        console.error('Caught exception in /update-roles', err);
+        interaction.reply({
+            content: ERROR_MESSAGE,
+            ephemeral: true
+        })
+        return;
     }
 
-    return [null, 'Successfully updated user roles according to our directory.']
-};
+    interaction.reply({
+        content: 'Successfully updated user roles according to our directory.',
+        ephemeral: true
+    });
+}
 
-module.exports = updateRoles;
+module.exports = {
+    data: new SlashCommandBuilder()
+		.setName('update-roles')
+		.setDescription('update your team roles based on our directory'),
+    execute
+};
