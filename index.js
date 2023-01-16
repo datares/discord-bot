@@ -1,4 +1,4 @@
-const { REST, Client, GatewayIntentBits, Routes } = require('discord.js');
+const { Client, GatewayIntentBits } = require('discord.js');
 require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` });
 const registerCommands = require('./commands');
 
