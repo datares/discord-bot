@@ -6,12 +6,11 @@ const SERVER_ID = process.env.SERVER_ID;
 
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
-let server = null;
 
 // When the client is ready, run this code (only once)
 client.once('ready', async () => {
 	console.log('Ready!');
-	server = await client.guilds.fetch(SERVER_ID);
+	await client.guilds.fetch(SERVER_ID);
 	registerCommands(client);
 });
 

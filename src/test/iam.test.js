@@ -52,8 +52,8 @@ describe('iam', () => {
         });
         test('stores verification code', async () => {
             interaction.options.email = 'chris.m.milan@gmail.com';
-            let client = new MongoClient(global.__MONGO_URI__);
-            let db = client.db('datares-discord-bot');
+            const client = new MongoClient(global.__MONGO_URI__);
+            const db = client.db('datares-discord-bot');
 
             await execute(interaction);
 
