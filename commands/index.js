@@ -17,7 +17,7 @@ module.exports = (client) => {
         }
     });
     // Register commands with Discord API
-    const rest = new REST({ version: '10' }).setToken(token);
+    const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
 
     (async () => {
         try {
