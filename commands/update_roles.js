@@ -30,7 +30,7 @@ async function execute(interaction) {
 
     try {
         const new_role = await updateUserRoles(data.email, user_id, client);
-        await users.updateOne({user_id}, {$set: {
+        await db.collection("users").updateOne({user_id}, {$set: {
             team: new_role
         }})
     }
