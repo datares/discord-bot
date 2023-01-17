@@ -1,4 +1,4 @@
-const { Collection } = require('discord.js');
+const { Collection, REST, Routes } = require('discord.js');
 const iam = require('./iam');
 const updateRoles = require('./update_roles');
 const verify = require('./verify');
@@ -7,6 +7,7 @@ const whoami = require('./whoami');
 let commands = [iam, updateRoles, verify, whoami];
 
 module.exports = (client) => {
+    // Collate commands into Collection
     client.commands = new Collection();
     commands.forEach(command => {
         if ('data' in command && 'execute' in command) {
@@ -15,6 +16,24 @@ module.exports = (client) => {
             console.error(`Failed to register command ${command}, 'data' or 'execute' missing.`);
         }
     });
+    // Register commands with Discord API
+    const rest = new REST({ version: '10' }).setToken(token);
+
+    (async () => {
+        try {
+            console.log(`Started refreshing ${commands.length} application (/) commands.`);
+            // The put method is used to fully refresh all commands in the guild with the current set
+            const data = await rest.put(
+                Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
+                { body: JSON.stringify(client.commands) },
+            );
+            console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+        } catch(error) {
+            console.error(error);
+        }
+    })();
+
+    // Handle commands
     client.on("interactionCreate", (interaction) => {
         if (!interaction.isChatInputCommand()) return;
         const command = interaction.client.commands.get(interaction.commandName);
@@ -24,5 +43,5 @@ module.exports = (client) => {
             return;
         }
         command.execute(interaction);
-    })
+    });
 };
