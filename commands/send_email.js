@@ -1,4 +1,4 @@
-const AWS = require('aws-sdk');
+const SES = require('aws-sdk/clients/ses');
 
 const SES_CONFIG = {
 	accessKeyId: process.env.AWS_KEY_ID,
@@ -6,7 +6,7 @@ const SES_CONFIG = {
 	region: process.env.AWS_REGION,
 };
 
-const AWS_SES = new AWS.SES(SES_CONFIG);
+const AWS_SES = new SES(SES_CONFIG);
 
 const sendEmail = (recipientEmail, verificationCode) => {
 	const params = {

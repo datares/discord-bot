@@ -1,11 +1,11 @@
 const { ERROR_MESSAGE } = require('./constants');
-const { verification, users } = require('./db')
+const db = require('../db')
 const { updateUserRoles } = require('./helpers')
 const { SlashCommandBuilder } = require('discord.js');
 
 const addVerifiedUser = async (user_id, email, team) => {
     const doc = { user_id, email, team };
-    await users.insertOne(doc);
+    await db.collection("users").insertOne(doc);
 }
 
 async function execute(interaction) {
@@ -16,7 +16,7 @@ async function execute(interaction) {
     const doc = {user_id, verification_code: code};
     let userVerification = null;
     try {
-        userVerification = await verification.findOne(doc);
+        userVerification = await db.collection("verification").findOne(doc);
     }
     catch (err) {
         console.error('Caught exception in /verify', err);
@@ -48,7 +48,7 @@ async function execute(interaction) {
 
     try {
         addVerifiedUser(user_id, email, role);
-        await verification.deleteOne(doc);
+        await db.collection("verification").deleteOne(doc);
     }
     catch (err) {
         console.error('Caught exception in /verify', err);

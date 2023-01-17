@@ -1,5 +1,5 @@
 const { ERROR_MESSAGE } = require('./constants');
-const { users } = require('./db')
+const db = require('../db')
 const {updateUserRoles} = require('./helpers');
 const { SlashCommandBuilder } = require('discord.js');
 
@@ -9,7 +9,7 @@ async function execute(interaction) {
 
     let data = null;
     try {
-        data = await users.findOne({user_id});
+        data = await db.collection("users").findOne({user_id});
     }
     catch (err) {
         console.error('Caught exception in /update-roles', err);

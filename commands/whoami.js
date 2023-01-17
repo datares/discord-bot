@@ -1,5 +1,5 @@
 const { ERROR_MESSAGE } = require('./constants');
-const { getDb } = require('./db')
+const db = require('../db')
 const { SlashCommandBuilder } = require('discord.js');
 
 async function execute(interaction) {
@@ -7,8 +7,7 @@ async function execute(interaction) {
 
     let user_info = null;
     try {
-        const db = getDb('users');
-        user_info = await db.findOne({user_id});
+        user_info = await db.collection("users").findOne({user_id});
     }
     catch (err) {
         console.error('Caught exception in whoami', err);
