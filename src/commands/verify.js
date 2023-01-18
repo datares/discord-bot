@@ -1,6 +1,6 @@
 const { ERROR_MESSAGE } = require("./constants");
 const db = require("../db");
-const { updateUserRoles } = require("./helpers");
+const { updateUserFromSheet } = require("./helpers");
 const { SlashCommandBuilder } = require("discord.js");
 
 const addVerifiedUser = async (user_id, email, team) => {
@@ -35,7 +35,7 @@ async function execute(interaction) {
   }
 
   const email = userVerification.email;
-  const role = await updateUserRoles(email, user_id, client);
+  const role = await updateUserFromSheet(email, user_id, client);
   if (!role) {
     // user not found in sheet
     interaction.reply({

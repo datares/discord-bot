@@ -1,6 +1,6 @@
 const { ERROR_MESSAGE } = require("./constants");
 const db = require("../db");
-const { updateUserRoles } = require("./helpers");
+const { updateUserFromSheet } = require("./helpers");
 const { SlashCommandBuilder } = require("discord.js");
 
 async function execute(interaction) {
@@ -29,7 +29,7 @@ async function execute(interaction) {
   }
 
   try {
-    const new_role = await updateUserRoles(data.email, user_id, client);
+    const new_role = await updateUserFromSheet(data.email, user_id, client);
     await db.collection("users").updateOne(
       { user_id },
       {
