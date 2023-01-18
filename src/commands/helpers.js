@@ -23,7 +23,7 @@ const updateUserRoles = async (email, user_id, client) => {
         return null;
     }
     const member = getMember(client, user_id);
-    const role = member.guild.roles.cache.find(role => role.name === role_to_assign);
+    const role = member.guild.roles.cache.find(r => r.name === role_to_assign);
     member.roles.add(role);
     return role_to_assign;
 }
