@@ -1,8 +1,7 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 const { updateSheet } = require("./read_sheet");
 
 async function execute(interaction) {
-  // TODO: Make admin only
   await updateSheet();
   interaction.reply({
     content: "Sheet updated",
@@ -13,6 +12,7 @@ async function execute(interaction) {
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("update-sheet")
-    .setDescription("update google sheet cached data (ADMIN ONLY!)"),
+    .setDescription("update google sheet cached data (ADMIN ONLY!)")
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
   execute,
 };
