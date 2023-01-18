@@ -17,8 +17,7 @@ const getMember = (client, userId) => {
     return member;
 }
 
-const updateUserRoles = async (email, user_id, client) => {
-    const role_to_assign = await getRoles(email);
+const addRoleToUser = async (client, user_id, role_to_assign) => {
     if (!role_to_assign) {
         return null;
     }
@@ -28,4 +27,9 @@ const updateUserRoles = async (email, user_id, client) => {
     return role_to_assign;
 }
 
-module.exports = { updateUserRoles };
+const updateUserRoles = async (email, user_id, client) => {
+    const role_to_assign = await getRoles(email);
+    return addRoleToUser(client, user_id, role_to_assign);
+}
+
+module.exports = { updateUserRoles, addRoleToUser };
