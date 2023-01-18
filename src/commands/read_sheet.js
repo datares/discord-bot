@@ -4,7 +4,7 @@ const API_KEY = process.env.GOOGLE_API_KEY;
 const SHEET_ID = process.env.SHEET_ID;
 const SHEET_GID = process.env.SHEET_GID;
 
-const readSheet = async () => {
+async function updateSheet() {
   const doc = new GoogleSpreadsheet(SHEET_ID);
   doc.useApiKey(API_KEY);
   // https://theoephraim.github.io/node-google-spreadsheet/#/classes/google-spreadsheet-worksheet
@@ -16,7 +16,9 @@ const readSheet = async () => {
   for (const row of rows) {
     data.push({ name: row.Name, email: row.Email, status: row.Status });
   }
-  return data;
-};
+  global.sheetData = data;
+}
 
-module.exports = readSheet;
+updateSheet();
+
+module.exports = { updateSheet };

@@ -4,8 +4,18 @@ const updateRoles = require("./update_roles");
 const verify = require("./verify");
 const whoami = require("./whoami");
 const datalearn = require("./datalearn");
+const updateAll = require("./update_all");
+const updateSheet = require("./update_sheet");
 
-const commands = [iam, updateRoles, verify, whoami, datalearn];
+const commands = [
+  iam,
+  updateRoles,
+  verify,
+  whoami,
+  datalearn,
+  updateAll,
+  updateSheet,
+];
 
 module.exports = (client) => {
   // Collate commands into Collection

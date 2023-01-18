@@ -1,23 +1,21 @@
-const readSheet = require("./read_sheet");
-
-const getMember = (client, userId) => {
+async function getMember(client, userId) {
   const guild = client.guilds.cache.get(process.env.GUILD_ID);
-  const member = guild.members.cache.get(userId);
+  const member = await guild.members.cache.get(userId);
   return member;
-};
+}
 
-const addRoleToUser = async (client, user_id, role_to_assign) => {
+async function addRoleToUser(client, user_id, role_to_assign) {
   if (!role_to_assign) {
     return null;
   }
-  const member = getMember(client, user_id);
+  const member = await getMember(client, user_id);
   const role = member.guild.roles.cache.find((r) => r.name === role_to_assign);
   member.roles.add(role);
   return role_to_assign;
-};
+}
 
 async function updateUserFromSheet(email, user_id, client) {
-  const members = await readSheet();
+  const members = global.sheetData;
   const user = members.find((value) => value.email === email);
 
   // If we could not find user
@@ -26,15 +24,23 @@ async function updateUserFromSheet(email, user_id, client) {
   }
 
   // Give user respective team role
-  const member = getMember(client, user_id);
+  const member = await getMember(client, user_id);
   const role = member.guild.roles.cache.find((r) => r.name === user.status);
-  member.roles.add(role);
+  if (role) {
+    try {
+      await member.roles.add(role);
+    } catch (err) {
+      console.error(`Failed to set ${user.name}'s role:`, err);
+    }
+  } else {
+    console.error(`Could not find role '${user.status}' for ${user.name}.`);
+  }
 
   // Set user's name
   try {
-    member.setNickname(user.name);
+    await member.setNickname(user.name);
   } catch (err) {
-    console.error(`Failed to set ${user.name}'s nickname: `, err);
+    console.error(`Failed to set ${user.name}'s nickname:`, err);
   }
 
   return user.status;

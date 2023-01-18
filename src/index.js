@@ -5,7 +5,9 @@ const registerCommands = require("./commands");
 const SERVER_ID = process.env.SERVER_ID;
 
 // Create a new client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
+});
 
 // When the client is ready, run this code (only once)
 client.once("ready", async () => {
