@@ -1,13 +1,13 @@
-name: Jest Unit Tests
+name: Prettier Format Check
 
 on: [push, pull_request]
 
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
         run: npm ci
-      - name: Run tests
-        run: npm test
+      - name: Prettier check
+        run: npm run format:check
